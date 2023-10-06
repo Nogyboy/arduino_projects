@@ -12,6 +12,8 @@ void setup() {
   pinMode(digitalInputPin, INPUT);
   pinMode(outputPin, OUTPUT);
   Serial.begin(9600);
+  digitalWrite(outputPin, HIGH);
+  delay(3000);
 }
 
 void loop() {
@@ -27,8 +29,8 @@ void loop() {
     // Leer el valor de la entrada analógica (rango de 0 a 1023)
     analogInputValue = analogRead(analogInputPin);
     
-    // Mapear el valor analógico al rango de tiempo deseado (10 segundos a 5 minutos)
-    delayTime = map(analogInputValue, 0, 1023, 10000, 300000)/1000;
+    // Mapear el valor analógico al rango de tiempo deseado (5 segundos a 5 minutos)
+    delayTime = map(analogInputValue, 0, 1023, 5000, 300000)/1000;
 
     // Tiempo de retardo
     Serial.println("Fotocélula detectada");
@@ -44,8 +46,13 @@ void loop() {
     // Desactivar la salida digital
     digitalWrite(outputPin, HIGH);
     outputActive = false;
+    setTime = 0;
+    delayTime = 0;
   }
 
-  setTime=setTime+1;
+  // Incrementar el contador de tiempo si el delayTime es mayor que cero
+  if (delayTime > 0) {
+    setTime = setTime + 1;
+  }
   delay(1000);
 }
